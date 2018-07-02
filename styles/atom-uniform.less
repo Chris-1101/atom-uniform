@@ -1,8 +1,17 @@
-// The ui-variables file is provided by base themes provided by Atom.
-//
-// See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
-// for a full listing of what's available.
+// https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
 @import "ui-variables";
 
 .atom-uniform {
+    .input-label {
+        margin-right: 30px;
+    }
+
+    input[type="radio"]:checked + span {
+        color: @text-color-info;
+    }
+
+    .atom-uniform-radioList {
+        // pointer-events: none;
+        z-index: 12;
+    }
 }
