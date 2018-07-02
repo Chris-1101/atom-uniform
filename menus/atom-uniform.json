@@ -2,7 +2,7 @@
   "context-menu": {
     "atom-text-editor": [
       {
-        "label": "Toggle atom-uniform",
+        "label": "Format Text With Uniform",
         "command": "atom-uniform:toggle"
       }
     ]
@@ -12,10 +12,10 @@
       "label": "Packages",
       "submenu": [
         {
-          "label": "atom-uniform",
+          "label": "Uniform",
           "submenu": [
             {
-              "label": "Toggle",
+              "label": "Format Text",
               "command": "atom-uniform:toggle"
             }
           ]
