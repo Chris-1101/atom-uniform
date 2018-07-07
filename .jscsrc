@@ -1,0 +1,7 @@
+{
+  "preset": "airbnb",
+  "maximumLineLength": 130,
+  "requireTrailingComma": false,
+  "disallowTrailingWhitespace": false,
+  "disallowSpaceAfterObjectKeys": false
+}
