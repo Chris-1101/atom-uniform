@@ -20,5 +20,9 @@
   },
   "dependencies": {
     "etch": "^0.14.0"
+  },
+  "author": {
+    "name": "Chris MB",
+    "url": "https://github.com/Chris-1101"
   }
 }
