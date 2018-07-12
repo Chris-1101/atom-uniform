@@ -12,7 +12,7 @@ A simple package to emulate text formatting in Atom using symbols from the unico
 
 The original purpose of this package was to enable the ability to emphasise certain parts of comments, but it can be used to create italic or bold text anywhere that formatting isn't traditionally allowed.
 
-And in case you're wondering, the name `Uniform` is an acronym of <u>Uni</u>code <u>Form</u>at!
+And in case you're wondering, the name `Uniform` is an acronym of <strong>Uni</strong>code <strong>Form</strong>at.
 
 ## Installation
 ```
