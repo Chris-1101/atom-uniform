@@ -1,6 +1,12 @@
 # Uniform Package for Atom
 
-A simple Atom package to emulate text formatting in Atom using symbols from the unicode character table's [Mathematical Alphanumeric Symbols](https://codepoints.net/mathematical_alphanumeric_symbols) block. The ability to display these symbols will depend on which font is being used. Atom's default font supports all the symbols in the `MAS` block and has good support for most commonly-used symbols.
+[![Build Status](https://travis-ci.org/Chris-1101/atom-uniform.svg?branch=master)](https://travis-ci.org/Chris-1101/atom-uniform/)
+[![Dependencies](https://david-dm.org/Chris-1101/atom-uniform.svg)](https://david-dm.org/Chris-1101/atom-uniform)
+[![Maintainability](https://api.codeclimate.com/v1/badges/875d210fb1758d448188/maintainability)](https://codeclimate.com/github/Chris-1101/atom-uniform/maintainability)
+[![License](https://img.shields.io/github/license/Chris-1101/atom-uniform.svg)](https://github.com/Chris-1101/atom-uniform/blob/master/LICENSE.md)
+[![apm](https://img.shields.io/apm/v/atom-uniform.svg)](https://atom.io/packages/atom-uniform)
+
+A simple package to emulate text formatting in Atom using symbols from the unicode character table's [Mathematical Alphanumeric Symbols](https://codepoints.net/mathematical_alphanumeric_symbols) block. The ability to display these symbols will depend on which font is being used. Atom's default font supports all the symbols in the `MAS` block and has good support for most commonly-used symbols.
 
 ![atom-uniform preview](https://raw.githubusercontent.com/Chris-1101/atom-uniform/master/preview.png)
 
@@ -8,9 +14,14 @@ The original purpose of this package was to enable the ability to emphasise cert
 
 And in case you're wondering, the name `Uniform` is an acronym of <u>Uni</u>code <u>Form</u>at!
 
+## Installation
+> apm install atom-uniform
+
+You can also open Atom and go to `Preferences` » `Install` and search for `atom-uniform`
+
 ## Usage
  * This package will only work inside Atom's actual editor panes
- * Execute `atom-uniform:toggle` or use the keymap (`ctrl-alt-u` by default)
+ * Execute `atom-uniform:toggle` or use the keymap (<kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>u</kbd> by default)
 
 #### Package Settings
  * `Auto-Format Selection:` when **enabled**, having text selected will cause the package to format it on the spot using the specified preset. When **disabled**, any selection will instead get added to the input dialogue. (default: `enabled`)
