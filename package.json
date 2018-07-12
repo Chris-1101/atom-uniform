@@ -1,7 +1,7 @@
 {
   "name": "atom-uniform",
   "main": "./lib/atom-uniform",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Use unicode symbols to create formatted text",
   "keywords": [
     "comments",
