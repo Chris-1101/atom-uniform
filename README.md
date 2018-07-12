@@ -15,9 +15,10 @@ The original purpose of this package was to enable the ability to emphasise cert
 And in case you're wondering, the name `Uniform` is an acronym of <u>Uni</u>code <u>Form</u>at!
 
 ## Installation
-> apm install atom-uniform
-
-You can also open Atom and go to `Preferences` » `Install` and search for `atom-uniform`
+```
+$ apm install atom-uniform
+```
+You can also use Atom: go to `Preferences` » `Install` and search for `atom-uniform`
 
 ## Usage
  * This package will only work inside Atom's actual editor panes
