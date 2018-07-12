@@ -1,73 +1,123 @@
 'use babel';
 
 import AtomUniform from '../lib/atom-uniform';
+import Format from '../lib/atom-uniform-enum';
 
-// Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
-//
-// To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`
-// or `fdescribe`). Remove the `f` to unfocus the block.
+// NOTE This is a mess
+// TODO Clean up ─➤ DRY
+// TODO Adopt better form: closer to one expect per specification
 
-describe('AtomUniform', () => {
-  let workspaceElement, activationPromise;
+describe("The 'atom-uniform' package", () => {
+  let workspaceElement, activationPromise, editor;
 
   beforeEach(() => {
     workspaceElement = atom.views.getView(atom.workspace);
     activationPromise = atom.packages.activatePackage('atom-uniform');
+
+    // Build editor to be retrieved
+    editor = atom.workspace.buildTextEditor();
+    editor.setText('test string with #@%& symbols');
+    spyOn(atom.workspace, 'getActiveTextEditor').andReturn(editor);
   });
 
   describe('when the atom-uniform:toggle event is triggered', () => {
-    it('hides and shows the modal panel', () => {
-      // Before the activation event the view is not on the DOM, and no panel
-      // has been created
-      expect(workspaceElement.querySelector('.atom-uniform')).not.toExist();
+    it('activates the package, initialises the view element, and toggles the panel', () => {
 
-      // This is an activation event, triggering it will cause the package to be
-      // activated.
+      // The package should be loaded
+      expect(atom.packages.loadedPackages['atom-uniform']).toBeDefined();
+
+      // Prior to activation, the panel shouldn't exist on the DOM
+      expect(workspaceElement.querySelector('#rootElement')).not.toExist();
+
+      // Trigger the toggle() command, this also activates the package
       atom.commands.dispatch(workspaceElement, 'atom-uniform:toggle');
 
-      waitsForPromise(() => {
-        return activationPromise;
-      });
+      // Wait for activation
+      waitsForPromise(() => activationPromise);
 
       runs(() => {
-        expect(workspaceElement.querySelector('.atom-uniform')).toExist();
+        const atomUniformElement = workspaceElement.querySelector('#rootElement');
+        const atomUniformPanel = atom.workspace.panelForItem(atomUniformElement);
 
-        let atomUniformElement = workspaceElement.querySelector('.atom-uniform');
+        // The package should have been activated and the panel displayed
         expect(atomUniformElement).toExist();
-
-        let atomUniformPanel = atom.workspace.panelForItem(atomUniformElement);
         expect(atomUniformPanel.isVisible()).toBe(true);
+
+        // After triggering the toggle() command again, panel should be hidden
         atom.commands.dispatch(workspaceElement, 'atom-uniform:toggle');
         expect(atomUniformPanel.isVisible()).toBe(false);
       });
+
     });
 
-    it('hides and shows the view', () => {
-      // This test shows you an integration test testing at the view level.
+    it("formats the selection without openning the modal panel (if 'Auto-Format Selection' is enabled)", () => {
 
-      // Attaching the workspaceElement to the DOM is required to allow the
-      // `toBeVisible()` matchers to work. Anything testing visibility or focus
-      // requires that the workspaceElement is on the DOM. Tests that attach the
-      // workspaceElement to the DOM are generally slower than those off DOM.
-      jasmine.attachToDOM(workspaceElement);
+      // Create selection in editor
+      editor.selectAll();
 
-      expect(workspaceElement.querySelector('.atom-uniform')).not.toExist();
+      // Set package config
+      atom.config.set('atom-uniform.autoFormat.isEnabled', true);
+      atom.config.set('atom-uniform.autoFormat.preset', Format.ITALIC);
 
-      // This is an activation event, triggering it causes the package to be
-      // activated.
+      // Activation sequence
       atom.commands.dispatch(workspaceElement, 'atom-uniform:toggle');
-
-      waitsForPromise(() => {
-        return activationPromise;
-      });
+      waitsForPromise(() => activationPromise);
 
       runs(() => {
-        // Now we can test for view visibility
-        let atomUniformElement = workspaceElement.querySelector('.atom-uniform');
+        const atomUniformElement = workspaceElement.querySelector('#rootElement');
+        const atomUniformPanel = atom.workspace.panelForItem(atomUniformElement);
+
+        // Panel shouldn't open, text formats in-place
+        expect(atomUniformPanel.isVisible()).toBe(false);
+        expect(editor.getText()).toBe('𝘵𝘦𝘴𝘵 𝘴𝘵𝘳𝘪𝘯𝘨 𝘸𝘪𝘵𝘩 #@%& 𝘴𝘺𝘮𝘣𝘰𝘭𝘴');
+      });
+
+    });
+
+    it('sends selected text to the input dialogue which accepts confirm/cancel commands', () => {
+
+      // Required to send commands to the mini editor
+      jasmine.attachToDOM(workspaceElement);
+
+      // Create selection in editor
+      editor.selectAll();
+
+      // Set package config
+      atom.config.set('atom-uniform.autoFormat.isEnabled', false);
+      atom.config.set('atom-uniform.defaults.formatType', Format.BOLD);
+
+      // Activation sequence
+      atom.commands.dispatch(workspaceElement, 'atom-uniform:toggle');
+      waitsForPromise(() => activationPromise);
+
+      runs(() => {
+        const atomUniformElement = workspaceElement.querySelector('#rootElement');
+        const atomUniformEditor = workspaceElement.querySelector('#rootElement .editor');
+        const atomUniformRadio = parseInt(workspaceElement.querySelector('input[name="formatType"]:checked').value);
+        const atomUniformPanel = atom.workspace.panelForItem(atomUniformElement);
+
+        // Panel should be visible, default format should be selected
         expect(atomUniformElement).toBeVisible();
+        expect(atomUniformRadio).toBe(Format.BOLD);
+
+        // Listen for .process() calls
+        spyOn(AtomUniform, 'process').andCallThrough();
+
+        // Validating mini editor's input closes the modal panel and calls .process()
+        atom.commands.dispatch(atomUniformEditor, 'core:confirm');
+        expect(atomUniformElement).not.toBeVisible();
+        expect(AtomUniform.process).toHaveBeenCalled();
+
+        // Selection in editor should have been replaced by formatted text
+        expect(editor.getText()).toBe('𝘁𝗲𝘀𝘁 𝘀𝘁𝗿𝗶𝗻𝗴 𝘄𝗶𝘁𝗵 #@%& 𝘀𝘆𝗺𝗯𝗼𝗹𝘀');
+
+        // Test dismiss command
         atom.commands.dispatch(workspaceElement, 'atom-uniform:toggle');
+        expect(atomUniformElement).toBeVisible();
+        atom.commands.dispatch(atomUniformEditor, 'core:cancel');
         expect(atomUniformElement).not.toBeVisible();
       });
+
     });
   });
 });
