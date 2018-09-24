@@ -30,8 +30,6 @@ You can also use Atom: go to `Preferences` » `Install` and search for `atom-uni
  * `Default Format Type:` specifies which format type the graphical dialogue should default to every new session. After that, it will remember the last format applied. (default: `Bold-Italic`)
 
 ## Use with Caution :warning:
-> // And under no circumstances ⌧⌧⌧⌧⌧⌧⌧⌧⌧ ⌧⌧⌧⌧⌧ ⌧⌧⌧⌧⌧
+> // Don't forget to ⌧⌧⌧⌧⌧⌧⌧⌧⌧ ⌧⌧⌧⌧⌧ ⌧⌧⌧⌧⌧
 
-That *would* defeat the point of emphasising an important comment, wouldn't it?
-
-As previously stated, this won't work with every font, and most likely not at all with most CLI/terminal fonts (vim/emacs). It's probably not a good idea to try and use this in large collaborative projects... Ye be warned!
+As previously stated, this might not work with every font, or every application depending on what fonts are installed on the system. And most likely not at all with most CLI/terminal fonts (vim/emacs). It's probably not a good idea to try and use this in large collaborative projects... Ye be warned!
